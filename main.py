@@ -8,22 +8,25 @@ import random as rd
 
 data = {}
 
-# I will remove this function
-def fakeData():
-    dataTimestamp = time.time()
-    value = rd.random() * 10
-    data["date"] = dataTimestamp
-    data["value"] = value
-    return data
-
 async def generateData():
-    print("Generating data")
-    
+    print("Start Generate Data")
+
+    controller = 0
+    value = 0
     while True:
+        if controller < 30:
+            value = rd.randrange(5,10) * 10
+        else:
+            value = rd.random() * 10
+        
+        controller += 1
+        if controller >= 50:
+            controller = 0
+
         dataTimestamp = time.time()
-        value = rd.random() * 10
         data["date"] = dataTimestamp
         data["value"] = value
+        await asyncio.sleep(0)
 
 
 async def handler(websocket):
@@ -36,11 +39,11 @@ async def handler(websocket):
         return
     
     while True:
-        d = fakeData()
-        await websocket.send(json.dumps(d))
-        print("Sended: {}".format(d))
+        await websocket.send(json.dumps(data))
+        print("Sended: {}".format(data))
 
         time.sleep(0.1) # Sleep 100 ms
+        await asyncio.sleep(0)
 
 
 async def startWebsocket():
@@ -50,10 +53,9 @@ async def startWebsocket():
 
 async def main():
     websocketServerTask = asyncio.create_task(startWebsocket())
-    #generateDataTask = asyncio.create_task(generateData())
-
+    generateDataTask = asyncio.create_task(generateData())
     await websocketServerTask
-    #await generateDataTask
+    await generateDataTask
 
 if __name__ == "__main__":
     asyncio.run(main())
