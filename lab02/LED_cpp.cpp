@@ -1,43 +1,53 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <unistd.h>
 
+using namespace std;
+
 //----------------------------------------[ VARS ]
-int leds[] = {16, 20, 21};
+int leds[] = {20, 21, 16};
 int num_leds = sizeof(leds) / sizeof(leds[0]);
 
-const std::string base_path = "/sys/class/gpio/";
+const string base_path = "/sys/class/gpio/";
 //-----------------------------------------------|
 
 //-----------------------------------[ FUNCTIONS ]
 void set_led_status(int gpio, int value) {
-    std::cout << "Set GPIO [ " << gpio << " ] value [ " << value << " ]" << std::endl;
+    cout << "Set GPIO [ " << gpio << " ] value [ " << value << " ]" << endl;
 
-    std::string path = base_path + "gpio" + std::to_string(gpio) + "/value";
-    std::ofstream file(path);
-    file << value;
+    string path = base_path + "gpio" + to_string(gpio) + "/value";
+    fstream fs;
+    fs.open(path, fstream::out);
+    fs << value;
+    fs.close();
 }
 
-void setup_led(int gpio, const std::string& mode) {
-    std::cout << "Enable GPIO [ " << gpio << " ] in mode [ " << mode << " ]" << std::endl;
+void setup_led(int gpio, const string& mode) {
+    cout << "Enable GPIO [ " << gpio << " ] in mode [ " << mode << " ]" << endl;
 
-    std::ofstream file("/sys/class/gpio/export");
-    file << gpio;
+    fstream fs;
+    fs.open("/sys/class/gpio/export", fstream::out);
+    fs << gpio;
+    fs.close();
 
-    usleep(1000000);
+    sleep(3);
 
-    std::string path = base_path + "gpio" + std::to_string(gpio) + "/direction";
-    std::ofstream direction(path);
-    direction << mode;
+    string path = base_path + "gpio" + to_string(gpio) + "/direction";
+    fs.open(path, fstream::out);
+    fs << mode;
+    fs.close();
 }
 
 void disable_led(int gpio) {
-    std::cout << "Disable GPIO [ " << gpio << " ]" << std::endl;
+    cout << "Disable GPIO [ " << gpio << " ]" << endl;
 
-    std::ofstream file("/sys/class/gpio/unexport");
-    file << gpio;
+    fstream fs;
+    fs.open("/sys/class/gpio/unexport", fstream::out);
+    fs << gpio;
+    fs.close();
 
-    usleep(1000000);
+    sleep(3);
 }
 
 //-----------------------------------------------|

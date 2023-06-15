@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #----------------------------------------[ VARS ]
-ledRed=16
-ledYellow=20
+ledRed=20
+ledYellow=16
 ledGreen=21
 #-----------------------------------------------|
 
@@ -12,9 +12,9 @@ function setupLed() {
     mode=$2 # Mode: in / out
 
     echo -en "Enable GPIO [ ${led} ] in mode [ ${mode} ]: "
-    echo $led >>"/sys/class/gpio/export"
-    sleep 1 # Wait 1 second to ensure export GPIO
-    echo $mode "/sys/class/gpio/gpio${led}/direction"
+    echo $led >> "/sys/class/gpio/export"
+    sleep 3 # Wait 3 second to ensure export GPIO
+    echo $mode >> "/sys/class/gpio/gpio${led}/direction"
     echo "Success"
 }
 
@@ -23,7 +23,7 @@ function disableLed() {
 
     echo -en "Disable GPIO [ ${led} ]: "
     echo $led >> "/sys/class/gpio/unexport"
-    sleep 1 # Wait 1 second to ensure unexport GPIO
+    sleep 3 # Wait 3 second to ensure unexport GPIO
     echo "Success"
 }
 

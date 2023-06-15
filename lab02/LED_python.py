@@ -5,8 +5,8 @@ from time import sleep
 
 #----------------------------------------[ VARS ]
 leds = {
-    "red": 16,
-    "yellow": 20,
+    "red": 20,
+    "yellow": 16,
     "green": 21
 }
 
@@ -20,7 +20,7 @@ def set_led_status(gpio, value):
 
     path = base_path + "gpio" + str(gpio) + "/value"
     f = open(path, "w")
-    f.write(value)
+    f.write(str(value))
     f.close
 
     return
@@ -30,10 +30,10 @@ def setup_led(gpio, mode):
 
     path = base_path + "export"
     f = open(path, "w")
-    f.write(gpio)
+    f.write(str(gpio))
     f.close
 
-    sleep(1)
+    sleep(3)
 
     path = base_path + "gpio" + str(gpio) + "/direction"
     f = open(path, "w")
@@ -47,7 +47,7 @@ def disable_led(gpio):
 
     path = base_path + "unexport"
     f = open(path, "w")
-    f.write(gpio)
+    f.write(str(gpio))
     f.close
 
     sleep(1)

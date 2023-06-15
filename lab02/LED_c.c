@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 //----------------------------------------[ VARS ]
-int leds[] = {16, 20, 21};
+int leds[] = {20, 21, 16};
 int num_leds = sizeof(leds) / sizeof(leds[0]);
 
 const char *base_path = "/sys/class/gpio/";
@@ -14,7 +14,7 @@ void set_led_status(int gpio, int value) {
     printf("Set GPIO [ %d ] value [ %d ]\n", gpio, value);
 
     char path[128];
-    snprintf(path, sizeof(path), "%s/gpio%d/value", base_path, gpio);
+    snprintf(path, sizeof(path), "%sgpio%d/value", base_path, gpio);
     FILE *f = fopen(path, "w");
     fprintf(f, "%d", value);
     fclose(f);
@@ -27,10 +27,10 @@ void setup_led(int gpio, const char *mode) {
     fprintf(f, "%d", gpio);
     fclose(f);
 
-    usleep(1000000);
+    sleep(3);
 
     char path[128];
-    snprintf(path, sizeof(path), "%s/gpio%d/direction", base_path, gpio);
+    snprintf(path, sizeof(path), "%sgpio%d/direction", base_path, gpio);
     f = fopen(path, "w");
     fprintf(f, "%s", mode);
     fclose(f);
@@ -43,7 +43,7 @@ void disable_led(int gpio) {
     fprintf(f, "%d", gpio);
     fclose(f);
 
-    usleep(1000000);
+    sleep(3);
 }
 
 //-----------------------------------------------|
@@ -54,7 +54,7 @@ int main() {
     {
         setup_led(leds[i], "out");
     }
-    
+
 
     for (int i = 0; i < 5; i++) {
 
