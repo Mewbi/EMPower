@@ -86,7 +86,7 @@ void loop() {
     Statehand = 0;
     delay(15);
   } 
-  else if ((Counter % 3 != 0) )
+  else
   {
     digitalWrite(led, HIGH);
     myservo1.write(180);                  // sets the servo position
