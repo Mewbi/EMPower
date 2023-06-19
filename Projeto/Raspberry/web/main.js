@@ -1,16 +1,43 @@
+const chargeLevel = document.getElementById("charge-level");
+const charge = document.getElementById("charge");
+const batteryValue = document.getElementById("battery-value");
+const sensorValue = document.getElementById("sensor-value");
+const handValue = document.getElementById("hand-value");
+const handImg = document.getElementById("hand-img");
+const handSrc = {
+  true: "assets/mao-fechada.png",
+  false: "assets/mao-aberta.png"
+};
+
+var yValue;
+var xValue;
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-var yValue;
-var xValue;
+function updateBatteryData(level) {
+  let batteryLevel = `${parseInt(level * 100)}%`;
+  charge.style.width = batteryLevel;
+  chargeLevel.textContent = batteryLevel;
+  batteryValue.innerText = batteryLevel; 
+}
+
+function updateHandImage(status){
+  handImg.src = handSrc[status];
+  if (status) {
+    handValue.innerText = "Fechada"
+  } else {
+    handValue.innerText = "Aberta"
+  }
+}
 
 async function getWebsocketData() {
   const event = {
     ready: true,
   };
 
-  const websocket = new WebSocket("ws://localhost:8001/");
+  const websocket = new WebSocket(`ws://${configWebsocket.host}:${configWebsocket.port}/`);
 
   websocket.onopen = function () {
     websocket.send(JSON.stringify(event));
@@ -21,16 +48,16 @@ async function getWebsocketData() {
     const event = JSON.parse(data);
 
     console.log("Received: " + data);
-    // console.log("Date 1:" + new Date())
-    // console.log("Date 2:" + new Date(event.date))
+
     yValue = event.value
     xValue = new Date(event.date * 1000); // The argument receive in milliseconds, not seconds
+    sensorValue.innerText = event.value;
+    updateBatteryData(event.battery)
+    updateHandImage(event.status)
   });
 }
 
 window.addEventListener("load", function () {
-
-
 
   getWebsocketData();
 
