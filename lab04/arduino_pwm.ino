@@ -10,6 +10,6 @@ void loop(){
    int val = map(valor, 0, 1023, 0, 255);
    Serial.print(val);
    Serial.print("\n");
-   delay(1000);
+   delay(100);
 }
 

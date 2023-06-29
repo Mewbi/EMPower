@@ -9,7 +9,7 @@
 
 int main () {
 	int file, count, valor;
-	if (( file = open ("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY )) <0) {
+	if (( file = open ("/dev/ttyACM0", O_RDWR | O_NOCTTY | O_NDELAY )) <0) {
 		perror("Falha ao abrir o arquivo.\n") ;
 		return -1;
 	}
@@ -22,7 +22,7 @@ int main () {
 
 	int pino_PWM = 23; // pwm por software na GPIO23
 	int brilho;
-	int range = 255; // periodo do PWM = 255 us * range
+	int range = 100; // periodo do PWM = 100 us * range
 	wiringPiSetupGpio(); // usar a numeracao GPIO , nao WPi
 
 	pinMode(pino_PWM, OUTPUT); // configura GPIO23 como saida
@@ -33,7 +33,7 @@ int main () {
 	while (1) {
 		if (( count = read(file, (void*) receive , 100) ) <0) {
 			perror("Falha ao ler da entrada .\n") ;
-			delay(100);
+			delay(1000);
 			continue;
 		}
 
@@ -42,6 +42,7 @@ int main () {
 			int n = atoi(receive);
 			printf("Foram lidos [%d] caracteres: %d \n", count , n);
 			softPwmWrite(pino_PWM, n);
+			delay(100);
 		}
 
 	}
