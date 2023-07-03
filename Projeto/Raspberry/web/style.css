@@ -1,0 +1,70 @@
+.chartBox {
+  width: 700px;
+}
+
+#battery {
+  box-sizing: content-box;
+  height: 106px;
+  width: 240px;
+  border: 0.6em solid #98a7c2;
+  margin: auto;
+  border-radius: 0.6em;
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-left: 10%;
+}
+
+#battery:before {
+  position: absolute;
+  content: "";
+  height: 5em;
+  width: 1.1em;
+  background-color: #98a7c2;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: -1.6em;
+  border-radius: 0 0.3em 0.3em 0;
+}
+
+#charge {
+  position: absolute;
+  height: 82px;
+  width: 215px;
+  background-color: #98a7c2;
+  top: 0.6em;
+  left: 0.6em;
+}
+
+#charge-level {
+  position: absolute;
+  font-size: 3em;
+  font-weight: 500;
+}
+
+.active {
+  animation: charge-animation 3s infinite linear;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  margin: 20px auto;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#hand {
+  width: 100px;
+  height: 100px;
+}
+
+@keyframes charge-animation {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 16.25em;
+  }
+}
