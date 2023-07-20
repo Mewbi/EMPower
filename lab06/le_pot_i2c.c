@@ -10,7 +10,7 @@
 #define BUFFER_SIZE 7      // 7 posicoes do buffer do Arduino: de 0x00 a 0x04
 
 int main(int argc, char **argv){
-   int file, i, alert=0xFF;
+   int file, i, alert=0xFF, command=0xFF;
    printf("Iniciando o programa de comunicacao com o Arduino via I2C.\n");
 
    if((file=open("/dev/i2c-1", O_RDWR)) < 0){ // abrindo o dispositivo I2C
@@ -23,24 +23,54 @@ int main(int argc, char **argv){
    }
 
    // verifica se foi passado um valor para o limite do alarme como argumento do programa
-   if(argc==2){
-     if (sscanf(argv[1],"%i",&alert)!=1) { // converte o argumento string para int
-        perror("Falha ao ler o valor do limite do alarme.\n");
+   if(argc==3){
+     if (sscanf(argv[1],"%i",&command)!=1) { // converte o argumento string para int
+        perror("Falha ao ler o comando\n");
         return 1;
      }
-     if (alert>1023 || alert<0) {
-        perror("Limite do alarme fora da faixa especificada.\n");
-        return 1;
-     }
-     char alertbuf[] = {0x02, 0, 0};    // limite do alarme com 'comando' 0x02
-     alertbuf[1] = alert & 0xFF;        // byte menos significativo
-     alertbuf[2] = alert >> 8;          // byte mais significativo
 
-     printf("Ajustando limite do alarme em %d.\n", alert);
-     if(write(file, alertbuf, 3)!=3){   // enviando os 3 bytes do alertbuf
-        perror("Falha ao ajustar o limite do alarme!\n");
+     if (command == 0x02) {
+        if (sscanf(argv[2],"%i",&alert)!=1) { // converte o argumento string para int
+           perror("Falha ao ler o valor do limite do alarme.\n");
+           return 1;
+        }
+        if (alert>1023 || alert<0) {
+           perror("Limite do alarme fora da faixa especificada.\n");
+           return 1;
+        }
+        char alertbuf[] = {0x02, 0, 0};    // limite do alarme com 'comando' 0x02
+        alertbuf[1] = alert & 0xFF;        // byte menos significativo
+        alertbuf[2] = alert >> 8;          // byte mais significativo
+
+        printf("Ajustando limite do alarme em %d.\n", alert);
+        if(write(file, alertbuf, 3)!=3){   // enviando os 3 bytes do alertbuf
+           perror("Falha ao ajustar o limite do alarme!\n");
+           return 1;
+        }
+     }else {
+        perror("Comando inválido\n");
+	return 1;
+     }
+   }
+
+   if (argc==2){
+      if (sscanf(argv[1],"%i",&command)!=1) { // converte o argumento string para int
+        perror("Falha ao ler o comando\n");
         return 1;
      }
+    if (command == 0x10) {
+        char alertbuf[] = {0x10};    // limite do alarme com 'comando' 0x02
+
+        printf("Ajustando limite com o comando 0x10.\n");
+        if(write(file, alertbuf, 1)!=1){   // enviando os 3 bytes do alertbuf
+           perror("Enviando o comando 0x10\n");
+           return 1;
+        }
+     }else {
+        perror("Comando inválido\n");
+	return 1;
+     }
+  
    }
 
    char rec[BUFFER_SIZE], send;         // cria buffer para receber os dados

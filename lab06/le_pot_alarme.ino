@@ -9,7 +9,10 @@ const int pinoLED = LED_BUILTIN;   // pino do LED do alarme (LED na placa do Ard
 int dadoRecebido;                  // guarda o dado recebido
 int limiteAlarme = 0;              // limite do alarme
 int valorPot = 0;                  // guarda o valor lido no potenciometro
-byte buffer[5];                    // guarda o valor lido, limite de alarme e valor do LED
+float valorVoltage = 0.0;
+int voltageInteiro = 0;
+int voltageDecimal = 0;
+byte buffer[7];                    // guarda o valor lido, limite de alarme e valor do LED
  
 void setup(){
   pinMode(pinoLED, OUTPUT);        // usar um LED como alarme
@@ -29,13 +32,22 @@ void enviaDadosPelaSerial(){              // opcional, para debug
   Serial.print(buffer[1],HEX); Serial.print(" "); // byte mais significativo do valor lido
   Serial.print(buffer[2],HEX); Serial.print(" "); // byte menos significativo do alarme
   Serial.print(buffer[3],HEX); Serial.print(" "); // byte mais significativo do alarme
-  Serial.println(buffer[4],HEX);                  // valor ajustado no LED
+  Serial.print(buffer[4],HEX); Serial.print(" "); // valor ajustado no LED
+  Serial.print("; Voltage = ");
+  Serial.print(buffer[5],HEX); Serial.print(",");
+  Serial.print(buffer[6],HEX); Serial.print(" ");
+  Serial.println();
 }
 
 void loop(){                       // Le o valor no potenciometro a cada 1 segundo
   valorPot = analogRead(PinoPotenciometro); // le dado com ADC de 10-bit
+  valorVoltage = valorPot * (5.0 / 1023.0);
+  voltageInteiro = (int)valorVoltage;
+  voltageDecimal = (valorVoltage - voltageInteiro) * 100;
   buffer[0] = valorPot & 0xFF;     // byte menos significativo
   buffer[1] = valorPot >> 8;       // byte mais significativo
+  buffer[5] = voltageInteiro;
+  buffer[6] = voltageDecimal;
   if (valorPot >= limiteAlarme) {  // verifica limite de alarme
      digitalWrite(pinoLED, HIGH);  // liga o LED do alarme
      buffer[4] = 0x01;
@@ -61,13 +73,23 @@ void funcaoDadoRecebido(int x){    // funcao chamada ao receber um dado
       limiteAlarme = valorRecebido;
     }
   }
+  
+  if (dadoRecebido == 0x10){
+    //valorPot = analogRead(PinoPotenciometro);
+    limiteAlarme = valorPot;
+    //byte dado1 = valorPot & 0xFF;
+    //byte dado2 = valorPot >> 8;
+    buffer[2] = buffer[0];
+    buffer[3] = buffer[1];
+  }
 }
  
 void funcaoResposta(){             // funcao chamada para responder
   byte resposta = 0x00;
-  if ( dadoRecebido >= 0x00 && dadoRecebido <= 0x04 ){
+  if ( dadoRecebido >= 0x00 && dadoRecebido <= 0x06 ){
     resposta = buffer[dadoRecebido];
   }
   delay(1);                        // pode ser necessario em velocidades de comunicacao mais altas
   Wire.write(resposta);            // envia um byte de dado pelo TWI
 }
+
