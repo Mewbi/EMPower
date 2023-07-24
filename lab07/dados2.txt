@@ -1,0 +1,12 @@
+# Arquivo de exemplo com quaisquer dados
+# X  Y
+  1  1
+  2  6
+  3  16
+  4  22
+  5  36
+  6  121
+  7  500  
+  8  450
+  9  300
+ 10  320
