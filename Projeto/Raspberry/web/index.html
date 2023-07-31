@@ -36,9 +36,7 @@
         class="container max-w-4xl mx-auto pt-16 md:pt-32 text-center break-normal"
       >
         <!--Title-->
-        <p class="text-white font-extrabold text-3xl md:text-5xl">
-          🩺 Monitoração EMG
-        </p>
+        <p class="text-white font-extrabold text-3xl md:text-5xl">🩺 EMPower</p>
         <p class="text-xl md:text-2xl text-gray-500">Grupo F</p>
       </div>
     </div>
@@ -85,35 +83,24 @@
                   <div
                     class="w-full mt-6 mb-3 font-bold text-xl text-gray-900 px-6 flex justify-center"
                   >
-                    Algum título
+                    Electromyography-Powered Prosthesis
                   </div>
                   <p class="text-gray-800 font-serif text-base px-6 mb-5">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Quisque eleifend venenatis dolor, ut fringilla enim mattis
-                    vitae. Sed vel lacus blandit, aliquam massa id, ornare ante.
-                    Ut lacinia lorem ut facilisis egestas. Donec facilisis et
-                    libero quis lobortis. Donec finibus dolor sit amet sapien
-                    finibus, et tempus turpis luctus. Suspendisse potenti. Cras
-                    tempor eleifend felis eget auctor. Quisque nec tellus vitae
-                    dui imperdiet maximus. Fusce pulvinar porttitor felis, et
-                    congue risus congue ut. Maecenas congue nulla laoreet sem
-                    tincidunt bibendum.
+                    No projeto contém o gráfico com a leitura do sensor EMG, com
+                    as variáveis de medição em y correspondente a movimentação
+                    em ordem de grandeza em milivolts e no eixo x corresponde ao
+                    horário em tempo real da leitura.
                   </p>
 
                   <p class="text-gray-800 font-serif text-base px-6 mb-5">
-                    Ut odio turpis, dictum eget dignissim ut, fermentum eu
-                    ligula. Fusce vel quam auctor, vehicula elit id, sodales
-                    lectus. Sed finibus vestibulum massa, euismod vulputate nunc
-                    auctor et. Suspendisse feugiat at sem non pellentesque.
-                    Etiam iaculis tristique rutrum. Maecenas vestibulum feugiat
-                    libero, eget vulputate nulla. In ultricies congue laoreet.
-                    Praesent erat magna, pharetra sit amet fermentum eget,
-                    mattis ut leo. Quisque venenatis in metus imperdiet
-                    pellentesque. Curabitur condimentum consectetur mi. Nullam
-                    eleifend dolor ligula, luctus accumsan arcu tincidunt quis.
-                    Aliquam placerat, augue sit amet vestibulum ornare, libero
-                    massa lobortis neque, ut consequat risus tortor vel augue.
-                    Sed nec condimentum ipsum.
+                    Além disso, a segunda parte da página apresenta o status em
+                    tempo real da movimentação da mão.
+                  </p>
+
+                  <p class="text-gray-800 font-serif text-base px-6 mb-5">
+                    Ambos os dados são lidos com um intervalo de 100 ms, que são
+                    transmitidos via interface serial entre os dispotivos
+                    (Arduino e RaspberryPi)
                   </p>
                 </div>
               </div>
@@ -141,7 +128,10 @@
                     Monitoração em Tempo Real
                   </div>
                   <p class="text-gray-800 font-serif text-base px-6 mb-5">
-                    Outra coisaaaaaaa
+                    Leitura do sinal do sensor de uma prótese de mão, controlada
+                    por meio de sinais de eletromiografia (EMG), captando sinais
+                    elétricos gerados pelos músculos do paciente e utilizá-los
+                    para controlar os movimentos da prótese.
                   </p>
                 </div>
 
@@ -163,86 +153,6 @@
 
           <!--Posts Container-->
           <div class="flex flex-wrap justify-between pt-12 -mx-6">
-            <!--1/2 col -->
-            <!-- <div
-              class="w-full md:w-1/2 p-6 flex flex-col flex-grow flex-shrink"
-            >
-              <div
-                class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow-lg"
-              >
-                <div class="no-underline hover:no-underline">
-                  <div class="grid justify-center">
-                    <div class="w-60 h-60">
-                      <img
-                        src="assets/mao-aberta.png"
-                        id="hand-img"
-                        class="hand h-full w-full rounded-t pb-6"
-                      />
-                    </div>
-                  </div>
-                  <p class="w-full text-gray-600 text-xs md:text-sm px-6">
-                    Mão Impressa
-                  </p>
-                  <div class="w-full font-bold text-xl text-gray-900 px-6">
-                    Status Atual da Mão
-                  </div>
-                  <p class="text-gray-800 font-serif text-base px-6 mb-5">
-                    Alguma outra descrição legal aqui. Alguma outra descrição
-                    legal aqui. Alguma outra descrição legal aqui.
-                  </p>
-                </div>
-              </div>
-              <div
-                class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow-lg p-6"
-              >
-                <div class="flex items-center justify-between">
-                  <b class="text-gray-600 text-xs md:text-sm">Status Atual:</b>
-                  <p
-                    class="text-gray-600 text-xs md:text-sm"
-                    id="hand-value"
-                  ></p>
-                </div>
-              </div>
-            </div> -->
-
-            <!--1/2 col -->
-            <!-- <div
-              class="w-full md:w-1/2 p-6 flex flex-col flex-grow flex-shrink"
-            >
-              <div
-                class="flex-1 flex-row bg-white rounded-t rounded-b-none overflow-hidden shadow-lg"
-              >
-                <div class="no-underline hover:no-underline">
-                  <div class="h-60 grid justify-center" style="width: 90%">
-                    <div id="battery">
-                      <div id="charge"></div>
-                      <div id="charge-level"></div>
-                    </div>
-                  </div>
-                  <p class="w-full text-gray-600 text-xs md:text-sm px-6">
-                    Bateria
-                  </p>
-                  <div class="w-full font-bold text-xl text-gray-900 px-6">
-                    Monitora o nível atual da bateria.
-                  </div>
-                  <p class="text-gray-800 font-serif text-base px-6 mb-5">
-                    Alguma outra descrição legal aqui. Alguma outra descrição
-                    legal aqui. Alguma outra descrição legal aqui.
-                  </p>
-                </div>
-              </div>
-              <div
-                class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow-lg p-6"
-              >
-                <div class="flex items-center justify-between">
-                  <b class="text-gray-600 text-xs md:text-sm">Valor Atual:</b>
-                  <p
-                    class="text-gray-600 text-xs md:text-sm"
-                    id="battery-value"
-                  ></p>
-                </div>
-              </div>
-            </div> -->
 
             <!--2/3 col -->
             <div
@@ -268,16 +178,9 @@
                     Status Atual da Mão
                   </div>
                   <p class="text-gray-800 font-serif text-base px-6 mb-5">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Mauris blandit libero at ligula sollicitudin, eu rhoncus
-                    felis ullamcorper. Etiam eu bibendum enim. Suspendisse non
-                    venenatis libero. Morbi luctus odio vel arcu malesuada
-                    lobortis. Vestibulum ante ipsum primis in faucibus orci
-                    luctus et ultrices posuere cubilia curae; Nunc feugiat,
-                    tellus et malesuada auctor, ante purus accumsan turpis, sit
-                    amet consectetur sem lorem et elit. Vivamus quis tempus
-                    nulla. Aenean hendrerit auctor metus, id tempor nisi
-                    vulputate et. Praesent a diam leo.
+                    Representação do status atual da prótese 3D. Apresenta se a
+                    mão se encontra fechada ou aberta com base no valor enviado
+                    pelo Arduino.
                   </p>
                 </div>
               </div>
