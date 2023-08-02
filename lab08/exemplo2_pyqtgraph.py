@@ -9,25 +9,36 @@ import serial
 import atexit
 import time
 
+def limpa_fila():
+    conexaoSerial.write(b'p')
+    while conexaoSerial.inWaiting() > 1:
+        _ = conexaoSerial.read()
+
 def atualiza_intervalo():
+    time.sleep(0.100)
     if conexaoSerial.inWaiting() > 1:
         dado1 = conexaoSerial.read()
         dado2 = conexaoSerial.read()
+        print(ord(dado1), ord(dado2))
         novodado = float( (ord(dado1) + ord(dado2)) )
         texto_intervalo.setText("interalo: "+str(novodado)+"ms" )
+    conexaoSerial.write(b'i')
 
 def inicia_coleta():
     conexaoSerial.write(b'i')
 
 def ler_intervalo():
+    limpa_fila()
     conexaoSerial.write(b't')   ## intervalo
     atualiza_intervalo()
     
 def aumenta_intervalo():
+    limpa_fila()
     conexaoSerial.write(b'a')  ## aumentar
     atualiza_intervalo()
 
 def diminui_intervalo():
+    limpa_fila()
     conexaoSerial.write(b'd')  ## diminuir
     atualiza_intervalo()
     
@@ -112,7 +123,7 @@ p2.addItem(proxy3,row=2,col=0)
 p2.addItem(proxy4,row=3,col=0)
 p2.addItem(proxy5,row=4,col=0)
 
-conexaoSerial = serial.Serial('/dev/ttyACM0',115200)
+conexaoSerial = serial.Serial('/dev/ttyUSB0',115200)
 conexaoSerial.write(b'i')
         
 # inicia timer rodando o mais rápido possível

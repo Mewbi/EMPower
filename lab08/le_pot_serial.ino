@@ -1,6 +1,7 @@
 const int analogInPin = A0;            // o potenciômetro esta ligado ao pino A0
 int iniciaColeta = 0;
 char charRecebido;                     // cria uma variavel para armazenar o caractere recebido
+int intervalo = 100;
 
 void setup(){
    // Configura a serial: baud rate de 115200, 8-bit, sem paridade, 1 stop bit
@@ -12,13 +13,33 @@ void loop(){
       charRecebido = Serial.read();    // le o caractere recebido
       switch ( charRecebido ){
           case 'i':                    // inicia coleta
-             iniciaColeta = 1;
-             break;
+            iniciaColeta = 1;
+            break;
              
           case 'p':                    // para a coleta
-             iniciaColeta = 0;
-             break;
-             
+            iniciaColeta = 0;
+            break;
+
+          case 't':                    // Envia intervalo
+            int valor = intervalo;
+            Serial.write(valor & 0xFF);          // envia byte menos significativo
+            Serial.write(valor >> 8);            // envia byte mais significativo
+            break;
+
+          case 'a':                    // Aumenta intervalo
+            intervalo = intervalo - 10;
+            valor = intervalo;
+            Serial.write(valor & 0xFF);          // envia byte menos significativo
+            Serial.write(valor >> 8);            // envia byte mais significativo
+            break;
+
+          case 'd':                    // Diminui intervalo
+            intervalo = intervalo - 10;
+            valor = intervalo;
+            Serial.write(valor & 0xFF);          // envia byte menos significativo
+            Serial.write(valor >> 8);            // envia byte mais significativo
+            break;
+
           default:                     // outro comando, ignora...
              break;
       }
@@ -28,5 +49,6 @@ void loop(){
        Serial.write(valor & 0xFF);          // envia byte menos significativo
        Serial.write(valor >> 8);            // envia byte mais significativo
    }
-   delay(100);                          // aguarda 100ms
+   delay(intervalo);                          // aguarda 100ms
 }
+
