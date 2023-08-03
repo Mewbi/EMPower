@@ -2,45 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui, QtCore
 import numpy as np
 import serial
 import atexit
 import time
 
-def limpa_fila():
-    conexaoSerial.write(b'p')
-    while conexaoSerial.inWaiting() > 1:
-        _ = conexaoSerial.read()
-
-def atualiza_intervalo():
-    time.sleep(0.100)
-    if conexaoSerial.inWaiting() > 1:
-        dado1 = conexaoSerial.read()
-        dado2 = conexaoSerial.read()
-        print(ord(dado1), ord(dado2))
-        novodado = float( (ord(dado1) + ord(dado2)) )
-        texto_intervalo.setText("interalo: "+str(novodado)+"ms" )
-    conexaoSerial.write(b'i')
-
 def inicia_coleta():
     conexaoSerial.write(b'i')
 
 def ler_intervalo():
-    limpa_fila()
     conexaoSerial.write(b't')   ## intervalo
-    atualiza_intervalo()
     
 def aumenta_intervalo():
-    limpa_fila()
     conexaoSerial.write(b'a')  ## aumentar
-    atualiza_intervalo()
 
 def diminui_intervalo():
-    limpa_fila()
     conexaoSerial.write(b'd')  ## diminuir
-    atualiza_intervalo()
     
 def para_coleta():
     conexaoSerial.write(b'p')
@@ -53,21 +32,30 @@ def saindo():
 def update():
     global data1, curve1, ptr1, conexaoSerial, x_atual, npontos, previousTime
     if conexaoSerial.inWaiting() > 1:
-        dado1 = conexaoSerial.read()
-        dado2 = conexaoSerial.read()
-        novodado = float( (ord(dado1) + ord(dado2)*256.0)*5.0/1023.0 )
+        dado = conexaoSerial.readline().decode().strip().split("|")
+        if len(dado) < 2:
+            return
+
+        comando = dado[0]
+        valor = float(dado[1])
+
+        if comando == "v":
+            novodado = float( (valor)*5.0/1023.0 )
         
-        data1[x_atual] = novodado
-        data1[(x_atual+1)%npontos] = np.nan
-        x_atual = x_atual+1
-        if x_atual >= npontos:
-            x_atual = 0
+            data1[x_atual] = novodado
+            data1[(x_atual+1)%npontos] = np.nan
+            x_atual = x_atual+1
+            if x_atual >= npontos:
+                x_atual = 0
         
-        curve1.setData(data1, connect="finite")
-        actualTime = time.time()*1000
-        taxa = str(round(actualTime-previousTime))
-        previousTime = actualTime
-        texto.setText("taxa: "+taxa.zfill(3)+"ms" )
+            curve1.setData(data1, connect="finite")
+            actualTime = time.time()*1000
+            taxa = str(round(actualTime-previousTime))
+            previousTime = actualTime
+            texto.setText("taxa: "+taxa.zfill(3)+"ms" )
+
+        elif comando == "i":
+            texto_intervalo.setText("intervalo: "+str(valor)+"ms" )
 
 win = pg.GraphicsWindow()
 win.setWindowTitle('Coletando dados do Arduino via Porta Serial')
@@ -123,7 +111,7 @@ p2.addItem(proxy3,row=2,col=0)
 p2.addItem(proxy4,row=3,col=0)
 p2.addItem(proxy5,row=4,col=0)
 
-conexaoSerial = serial.Serial('/dev/ttyUSB0',115200)
+conexaoSerial = serial.Serial('/dev/ttyACM0',115200)
 conexaoSerial.write(b'i')
         
 # inicia timer rodando o mais rápido possível
