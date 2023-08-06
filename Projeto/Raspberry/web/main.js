@@ -1,7 +1,5 @@
-const chargeLevel = document.getElementById("charge-level");
-const charge = document.getElementById("charge");
-const batteryValue = document.getElementById("battery-value");
 const sensorValue = document.getElementById("sensor-value");
+const triggerStatus = document.getElementById("trigger-status");
 const handValue = document.getElementById("hand-value");
 const handImg = document.getElementById("hand-img");
 const handSrc = {
@@ -16,11 +14,10 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function updateBatteryData(level) {
-  let batteryLevel = `${parseInt(level * 100)}%`;
-  charge.style.width = batteryLevel;
-  chargeLevel.textContent = batteryLevel;
-  batteryValue.innerText = batteryLevel; 
+function updateTriggerStatus(value){
+  // Convert o percent
+  let percent = ( value / 2 ) * 100
+  triggerStatus.innerText = `${percent}%`
 }
 
 function updateHandImage(status){
@@ -52,7 +49,7 @@ async function getWebsocketData() {
     yValue = event.value
     xValue = new Date(event.date * 1000); // The argument receive in milliseconds, not seconds
     sensorValue.innerText = event.value;
-    updateBatteryData(event.battery)
+    updateTriggerStatus(event.trigger_status)
     updateHandImage(event.status)
   });
 }

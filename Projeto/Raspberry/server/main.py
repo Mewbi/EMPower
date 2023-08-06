@@ -23,8 +23,12 @@ async def getSerialData():
             print("Receive: {}".format(line))
 
             arduino_data = line.split("|")
+
+            if len(arduino_data) != 3:
+                continue
+                
             data["date"] = time.time()
-            data["battery"] = arduino_data[0]
+            data["trigger_status"] = arduino_data[0]
             data["value"] = arduino_data[1]
 
             hand_status = False
