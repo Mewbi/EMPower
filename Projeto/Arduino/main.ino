@@ -9,7 +9,7 @@ unsigned long timer1=0; // A variável que irá contar o útimo
 // Sensor vars
 int EMGPin = A0;
 float EMGVal = 0;
-int EMGTrigger = 150;
+int EMGTrigger = 110;
 int fingerDelay = 400;
 
 // Hand vars
@@ -45,9 +45,9 @@ void loop() {
  
   Leitura_analogica = analogRead(EMGPin);  // Leitura_analogica aqui é o valor bruto
   Amostragem(); // Essa é a função que fará a amostragem no tempo que determinamos no intervalo de amostragem que definimos na segunda linha de código.
-  Serial.print(Leitura_analogica); // Imprime o dado bruto
-  Serial.print(",");
-  Serial.println(filtroLogico(0)); // Imprime o dado filtrado
+  //Serial.print(Leitura_analogica); // Imprime o dado bruto
+  //Serial.print(",");
+  //Serial.println(filtroLogico(0)); // Imprime o dado filtrado
 
 
   EMGVal = filtroLogico(0);
@@ -69,8 +69,8 @@ void loop() {
   // Format string
   String output = String(activeHand) + "|" + String(EMGVal) + "|" + String(handStatus);
 
-  //Serial.println(output);  // Send to Serial
-  delay(10);
+  Serial.println(output);  // Send to Serial
+  delay(100);
 }
 
 void Amostragem(){ // Essa função verifica se o tempo de amostragem  selecionado ocorreu
