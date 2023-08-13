@@ -3,8 +3,8 @@ const triggerStatus = document.getElementById("trigger-status");
 const handValue = document.getElementById("hand-value");
 const handImg = document.getElementById("hand-img");
 const handSrc = {
-  true: "assets/mao-fechada.png",
-  false: "assets/mao-aberta.png"
+  false: "assets/mao-fechada.png",
+  true: "assets/mao-aberta.png"
 };
 
 var yValue;
@@ -23,9 +23,9 @@ function updateTriggerStatus(value){
 function updateHandImage(status){
   handImg.src = handSrc[status];
   if (status) {
-    handValue.innerText = "Fechada"
-  } else {
     handValue.innerText = "Aberta"
+  } else {
+    handValue.innerText = "Fechada"
   }
 }
 
