@@ -1,5 +1,5 @@
 serial = {
-    "port": "/dev/ttyUSB0",
+    "port": "/dev/ttyACM1",
     "baud_rate": 115200,
 }
 

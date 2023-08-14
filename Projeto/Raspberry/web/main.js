@@ -93,6 +93,11 @@ window.addEventListener("load", function () {
           },
         },
         y: {
+          ticks: {
+            callback: function(value, index, ticks) {
+                return value + ' µV';
+            }
+          },
           beginAtZero: true,
         },
       },

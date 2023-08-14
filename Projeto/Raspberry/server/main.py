@@ -24,7 +24,7 @@ async def getSerialData():
 
             arduino_data = line.split("|")
 
-            if len(arduino_data) != 3:
+            if len(arduino_data) < 3:
                 continue
                 
             data["date"] = time.time()
