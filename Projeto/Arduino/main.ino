@@ -10,6 +10,7 @@ unsigned long timer1=0; // A variável que irá contar o útimo
 int EMGPin = A0;
 float EMGVal = 0;
 int EMGTrigger = 110;
+int fingerDelay = 400;
 
 // Hand vars
 int activeHand = 0;
@@ -25,16 +26,12 @@ int openValues[] = {180, 10, 0, 180, 60};
 int closeValues[] = {0, 180, 180, 0, 180};
 
 // Control vars
-int finger = 0;
-int fingerDelay = 400;
-long int lastReadFingerTime = 0;
-long int delayTrigger = 1000 +  5 * fingerDelay;
+long int delayTrigger = 1000; // 1000 ms delay
 long int lastReadTime = 0;
 
 void setup() {
   Serial.begin(115200);
   lastReadTime = millis();
-  lastReadFingerTime = millis();
   servo1.attach(11);
   servo2.attach(10);
   servo3.attach(9);
@@ -47,9 +44,7 @@ void setup() {
 void loop() {
  
   Leitura_analogica = analogRead(EMGPin);  // Leitura_analogica aqui é o valor bruto
-  //Leitura_analogica = random(100, 150);
   Amostragem(); // Essa é a função que fará a amostragem no tempo que determinamos no intervalo de amostragem que definimos na segunda linha de código.
-  
   //Serial.print(Leitura_analogica); // Imprime o dado bruto
   //Serial.print(",");
   //Serial.println(filtroLogico(0)); // Imprime o dado filtrado
@@ -66,17 +61,13 @@ void loop() {
     }
   }
 
-
   if (activeHand >= 2) {
-    if ((millis() - lastReadFingerTime) >=  fingerDelay) {
-      lastReadFingerTime = millis();
-      handStatus = changeHandStatus(handStatus);
-    }
-    
+    activeHand = 0;
+    handStatus = changeHandStatus(handStatus);
   }
 
   // Format string
-  String output = String(activeHand) + "|" + String(convertValue(EMGVal)) + "|" + String(handStatus) + "|" + String(finger);
+  String output = String(activeHand) + "|" + String(convertValue(EMGVal)) + "|" + String(handStatus);
 
   Serial.println(output);  // Send to Serial
   delay(100);
@@ -114,55 +105,34 @@ float filtroLogico(bool atualiza_saida){ // Igual nos outros exemplos, ele usa v
 bool changeHandStatus(bool actualStatus) {
     
     if (actualStatus) {
-      // Closing hand
-      if (finger == 0){
+        // Closing hand
         servo5.write(closeValues[4]);
-        finger += 1;
-
-      }else if (finger == 1){
+        delay(fingerDelay);
         servo4.write(closeValues[3]);
-        finger += 1;
-
-      }else if (finger == 2){
+        delay(fingerDelay);
         servo3.write(closeValues[2]);
-        finger += 1;
-        
-      }else if (finger == 3){
+        delay(fingerDelay);
         servo2.write(closeValues[1]);
-        finger += 1;
-
-      }else if (finger == 4){
+        delay(fingerDelay);
         servo1.write(closeValues[0]);
-        finger = 0;
-        activeHand = 0;
-        actualStatus = true; 
-      }
+        delay(fingerDelay);
+
+        actualStatus = false;
 
     } else {
-      // Opening hand
-      if (finger == 0){
+        // Opening hand
         servo1.write(openValues[0]);
-        finger += 1;
-
-      }else if (finger == 1){
+        delay(fingerDelay);
         servo2.write(openValues[1]);
-        finger += 1;
-
-      }else if (finger == 2){
+        delay(fingerDelay);
         servo3.write(openValues[2]);
-        finger += 1;
-        
-      }else if (finger == 3){
+        delay(fingerDelay);
         servo4.write(openValues[3]);
-        finger += 1;
-
-
-      }else if (finger == 4){
+        delay(fingerDelay);
         servo5.write(openValues[4]);
-        finger = 0;
-        activeHand = 0;
-        actualStatus = true; 
-      }        
+        delay(fingerDelay);
+        
+        actualStatus = true;
     }
 
     return actualStatus;
@@ -183,4 +153,3 @@ void setupHand() {
 
     return;
 }
-
