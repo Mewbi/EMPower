@@ -8,13 +8,13 @@ Os arquivos e códigos utilizados para o projeto se encontram no diretório [Pro
 
 ## 📌 Objetivos
 
-O objetivo do projeto é identificar sinais de contração muscular para caso seja acima de um valor de ativação definido, realize a abertura ou fechamento da protese de mão utilizando servo motores.
+O objetivo do projeto é identificar sinais de contração muscular para caso seja acima de um valor de ativação definido, realiza a abertura ou fechamento da prótese de mão utilizando servo motores.
 
 As informações coletadas pelo sensor, assim como o status da mão devem ser apresentados em uma página Web.
 
 ## ⚙️ Arduino
 
-As configurações no Arduino foram feitas seguindo o seguinte diagrama.
+As configurações no Arduino foram feitas seguindo o diagrama.
 
 <center>
 
@@ -39,7 +39,7 @@ A Raspberry possui duas responsabilidades:
 - Server: recebe os dados enviados pelo Arduino, parseia e os disponibiliza em um serviço Websocket
 - Web: apresenta a página Web em um serviço HTTP contendo as informações recebidas disponibilizadas no Websocket
 
-A comunicação segue o seguinte fluxo
+A comunicação segue fluxo
 
 <p align="center">
     <img src="/assets/comunicacao.png">
