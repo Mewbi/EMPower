@@ -1,11 +1,11 @@
-# Raspberry 
+# 🖥️ Raspberry 
 
 O Raspberry é responsável por executar dois serviços:
 
 - Comunicação com o Arduino para captar os dados do sensor
 - Servidor Web para apresentar as informações coletadas
 
-## Executando os Serviços
+## 📦 Executando os Serviços com Docker
 
 Os serviços podem ser inicializados usando `docker`
 
@@ -47,3 +47,26 @@ Para parar a execução dos serviços basta executar
 ```sh
 docker compose stop
 ```
+
+## 🔧 Executando os Serviços Manualmente
+
+Também é possível executar os serviços de forma manual sem a utilização do docker.
+
+### Inicializando
+
+Para inicializar o server basta ir no diretório [server](server/) e executar
+
+```sh
+python3 main.py
+```
+
+Caso seja necessário alterar a interface serial de comunicação edite o arquivo [config](server/config.py)
+
+Para executar o serviço HTTP basta ir no diretório [web](web/) e executar
+
+```sh
+sudo python3 -m http.server 80
+```
+
+Caso seja necessário alterar o endereço de comunicação com Websocket edite o arquivo [config](web/config.js)
+
